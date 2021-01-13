@@ -595,19 +595,20 @@ public class QtiImsExtUtils {
                 QtiCarrierConfigs.KEY_CARRIER_CANCEL_MODIFY_CALL_SUPPORTED));
     }
 
-    // Supported for multi sim only. Allows user to set auto reject call mode for IMS MT calls
+    // Supported for multi sim only. Allows user to enable or disable auto rejecting IMS MT calls
     // when high priority data is on the other sub
-    public static void setAutoRejectMode(ContentResolver contentResolver, int phoneId,
-            int arMode) {
+    public static void setAutoReject(ContentResolver contentResolver, int phoneId, boolean turnOn) {
+        final int value = turnOn ? QtiCallConstants.AUTO_REJECT_CALL_ENABLED :
+                QtiCallConstants.AUTO_REJECT_CALL_DISABLED;
         android.provider.Settings.Global.putInt(contentResolver,
-                QtiCallConstants.IMS_AUTO_REJECT_MODE + phoneId, arMode);
+                QtiCallConstants.IMS_AUTO_REJECT + phoneId, value);
     }
 
-    // Supported for multi sim only.
-    public static int getAutoRejectMode(ContentResolver contentResolver, int phoneId) {
+    // Supported for multi sim only. Default value is disabled
+    public static int getAutoReject(ContentResolver contentResolver, int phoneId) {
         return android.provider.Settings.Global.getInt(contentResolver,
-                QtiCallConstants.IMS_AUTO_REJECT_MODE + phoneId,
-                QtiCallConstants.AR_MODE_ALLOW_INCOMING);
+                QtiCallConstants.IMS_AUTO_REJECT + phoneId,
+                QtiCallConstants.AUTO_REJECT_CALL_DISABLED);
     }
 
     public static boolean canAcceptAsOneWayVideo(int phoneId, Context context) {
@@ -634,6 +635,6 @@ public class QtiImsExtUtils {
     public static int getCallComposerMode(ContentResolver contentResolver, int phoneId) {
         return android.provider.Settings.Global.getInt(contentResolver,
                 QtiCallConstants.IMS_CALL_COMPOSER + phoneId,
-                QtiCallConstants.CALL_COMPOSER_DISABLED);
+                QtiCallConstants.AUTO_REJECT_CALL_DISABLED);
     }
 }
